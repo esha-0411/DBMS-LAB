@@ -1,0 +1,22 @@
+1.alter table department modify name varchar(30);
+2.alter table department modify building varchar2(30) not null;
+3.desc depratment;
+4.#how to rename feild name:
+alter tablename rename field to newfield
+5.#check both tables ie instructor and department
+select * from instructor;
+select * from department;
+6.#increase the salary of each instructor in the comp.sci. department by 10%.
+update instructor set salary = salary + salary * .1
+ where dept_id = (select dept_id from department where name='Computer Science');
+7.update instructor set salary = salary + salary * .1
+where dept_id=(select dept_id from department where name='History');
+8#update salary of everyone by 5% whoes salary is below 80000
+update instructor set salary = salary + salary * 5/100 where salary <80000;
+8.#salary is above 80000 but below 85000 deduce 5%
+update instructor set salary = salary - salary * 5/100 where 80000< salary and salary <85000;
+9.select * from course;
+10.#create new course "CS-001",titled "Weekly Seminar",with 1 credit.
+insert into course(course_id,title,dept_id,credits)values('CS-001','Weekly Seminar',1,1);
+11#create a section of above course in Fall 2017,and with the location of this section not specified
+insert into section(section_id,course_id,sec_id,semester,year)values(8,'CS-001',1,'Fall',2017);
