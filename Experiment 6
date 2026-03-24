@@ -1,0 +1,137 @@
+1. Create procedure Hello
+AS
+BEGIN 
+DBMS_OUTPUT.PUT_LINE('Hello World!');
+END;
+
+OUTPUT: Procedure created.
+
+2. EXEC hello_world
+OUTPUT: Hello World
+
+PL/SQL procedure successfully completed.
+
+OR
+
+execute hello_world;
+OUTPUT: Hello World
+
+PL/SQL procedure successfully completed.
+
+3. CREATE or REPLACE procedure hello_world
+    AS
+    Begin
+    DBMS_OUTPUT.PUT_LINE('Hello World, Welcome to SIT Nagpur!');
+    END;
+    /
+
+OUTPUT: Procedure created.
+
+ EXEC hello_world
+OUTPUT: Hello World, Welcome to SIT Nagpur!
+
+PL/SQL procedure successfully completed.
+
+
+4.
+create or replace procedure addition as
+
+    a NUMBER;
+    b NUMBER;
+BEGIN
+    a := 5;
+    b := 10;
+
+    DBMS_OUTPUT.PUT_LINE('Result: ' || (a + b));
+END;
+/
+
+
+5.
+CREATE OR REPLACE PROCEDURE addition2
+(
+    a IN NUMBER,
+    b IN NUMBER
+)
+AS
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Result: ' || (a + b));
+END;
+/
+
+  Set Serveroutput on;
+SQL>  execute addition2(5,10);
+
+
+6.
+CREATE OR REPLACE PROCEDURE addition3
+(
+    a IN NUMBER,
+    b IN NUMBER, c OUT NUMBER
+)
+AS
+BEGIN
+    c:= a + b;
+    DBMS_OUTPUT.PUT_LINE('Result: ' || c);
+END;
+/
+
+variable c1 number;
+ execute addition3(5,10, :c1);
+
+7.
+CREATE OR REPLACE PROCEDURE addition4
+(
+   a IN OUT NUMBER, 
+   b IN OUT NUMBER
+)
+AS
+BEGIN
+   a := a + b;
+   b := a - b;
+   a := a - b;
+END;
+/
+
+=> VARIABLE a NUMBER;
+VARIABLE b NUMBER;
+
+BEGIN
+   :a := 5;
+   :b := 10;
+END;
+/
+
+EXEC addition4(:a, :b);
+
+PRINT a;
+PRINT b;
+
+8.
+CREATE OR REPLACE PROCEDURE LARGEST
+(
+   a IN NUMBER, 
+   b IN NUMBER,
+   c IN NUMBER,
+   LARGEST OUT NUMBER
+)
+IS
+BEGIN
+IF a >b AND a> c THEN
+   LARGEST:= a;
+ELSEIF b > a AND b > c THEN
+   LARGEST:= b;
+ELSE LARGEST:=c;
+END IF;
+END LARGEST;
+/
+=>DECLARE
+   x NUMBER := 10;
+   y NUMBER := 25;
+   z NUMBER := 15;
+   result NUMBER;
+BEGIN
+   LARGEST(x, y, z, result);
+   DBMS_OUTPUT.PUT_LINE('Largest number is: ' || result);
+END;
+/
