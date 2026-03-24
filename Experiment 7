@@ -1,0 +1,62 @@
+CREATE OR REPLACE PROCEDURE SumFirst10Numbers_WhileLoop AS
+    i NUMBER := 1;
+    sum1 NUMBER := 0;
+BEGIN
+    WHILE i <= 10 LOOP
+        sum1 := sum1 + i;
+        i := i + 1;
+    END LOOP;
+    DBMS_OUTPUT.PUT_LINE('Sum of first 10 numbers using WHILE loop: ' || sum1);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE SumFirst10Numbers_WhileLoop AS
+    i NUMBER := 1;
+    sum1 NUMBER := 0;
+BEGIN
+    WHILE i <= 10 LOOP
+        sum1 := sum1 + i;
+        i := i + 1;
+    EXIT WHEN i=50;
+    DBMS_OUTPUT.PUT_LINE('Sum of first 50 numbers using WHILE loop: ' || sum1);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE SumFirstNNumbers_WhileLoop (
+    n IN NUMBER
+) AS
+    i NUMBER := 1;
+    sum1 NUMBER := 0;
+BEGIN
+    WHILE i <= n LOOP
+        sum1 := sum1 + i;
+        i := i + 1;
+    END LOOP;
+
+    DBMS_OUTPUT.PUT_LINE('Sum of first ' || n || ' numbers is: ' || sum1);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE FibonacciSeries (
+    n IN NUMBER
+) AS
+    first_num  NUMBER := 0;
+    second_num NUMBER := 1;
+    next_num   NUMBER;
+    i NUMBER := 1;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Fibonacci Series up to ' || n || ' terms:');
+
+    WHILE i <= n LOOP
+        DBMS_OUTPUT.PUT_LINE(first_num);
+        
+        next_num := first_num + second_num;
+        first_num := second_num;
+        second_num := next_num;
+        
+        i := i + 1;
+    END LOOP;
+END;
+/
+SET SERVEROUTPUT ON;
+EXEC FibonacciSeries(10);
