@@ -1,0 +1,27 @@
+1. Inner Join:
+select e.emp_name , d.dept_name
+from Employees e
+INNER JOIN Deaprtments1 d ON e.dept_id = d.dept_id;
+
+2. Left Join:
+select e.emp_name , p.proj_name
+from Employees e
+Left JOIN Assignments a ON e.emp_id = a.emp_id
+left JOIN Projects p ON a.proj_id = p.proj_id;
+
+3. right join:
+select p.proj_name,  e.emp_name 
+from Projects p
+Right JOIN Assignments a ON p.proj_id = a.proj_id
+Right JOIN Employees e ON a.emp_id = e.emp_id;
+
+4. full outer
+select e.emp_name , d.dept_name
+from Employees e
+FULL OUTER JOIN Departments1 d ON e.dept_id = d.dept_id;
+
+5. SElf Join
+select e.emp_name as employees, m.emp_name as manager from employees e left join employees m on e.manager_id = m.emp_id;
+
+6.Cross Join:
+select e.emp_name, p.proj_name from employees e cross join projects p;
