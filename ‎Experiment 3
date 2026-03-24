@@ -1,0 +1,186 @@
+1.To display instructors from computer science department
+SQL> select * from instructor where dept_id=(select dept_id from department where name='Computer Science');
+INSTRUCTOR_ID NAME                                                  DEPT_ID I     SALARY
+------------- -------------------------------------------------- ---------- - ----------
+            1 John Doe                                                    1 Y      88000
+            2 Jane Smith                                                  1 N      78375
+A. Same using join
+SQL> insert into instructor values (0,'xyz',1,'N',55000);
+1 row created.
+2.Find the avg salary of instructor in the computer science
+SQL>select avg(salary) as AVG_SAL from instructor i join department d on i.dept_id=d.dept_id where d.name='Computer Science' group by d.name;
+INSTRUCTOR_ID NAME                                                  DEPT_ID I     SALARY
+------------- -------------------------------------------------- ---------- - ----------
+            1 John Doe                                                    1 Y      88000
+            2 Jane Smith                                                  1 N      78375
+            0 xyz                                                         1 N      55000
+3. Find the avg salary in each department 
+SQL> select d.name,avg(i.salary) as AVG_SAL from department d join instructor i on d.dept_id=i.dept_id group by d.name;
+   AVG_SAL
+----------
+73791.6667
+SQL> select d.name,avg(i.salary) as AVG_SAL from department d join instructor i on d.dept_id=i.dept_id group by d.name;
+
+NAME                              AVG_SAL
+------------------------------ ----------
+Mathematics                         78850
+Physics                          76878.75
+Computer Science               73791.6667
+Biology                           78802.5
+
+4. What is the total salary of all teachers earning in more than 30k?
+SQL> select * from department;
+
+   DEPT_ID NAME                           BUILDING                           BUDGET UNIVERSITY_ID
+---------- ------------------------------ ------------------------------ ---------- -------------
+         1 Computer Science               Taylor                             100000             1
+         2 Mathematics                    Watson                              90000             1
+         3 Physics                        Newton                              95000             1
+         4 Biology                        Darwin                              85000             1
+         5 Chemistry                      Curie                               92000             1
+         6 English                        Shakespeare                         80000             1
+         7 History                        Roosevelt                           78000             1
+
+7 rows selected.
+
+SQL> select * from instructor;
+
+INSTRUCTOR_ID NAME                                                  DEPT_ID I     SALARY
+------------- -------------------------------------------------- ---------- - ----------
+            1 John Doe                                                    1 Y      88000
+            2 Jane Smith                                                  1 N      78375
+            3 Bob Johnson                                                 2 Y      77900
+            4 Alice Brown                                                 2 N      79800
+            5 Charlie Davis                                               3 Y      76950
+            6 Eva Wilson                                                  3 N    76807.5
+            7 Frank Miller                                                4 Y    78802.5
+            0 xyz                                                         1 N      55000
+
+8 rows selected.
+SQL> select sum(salary)as total_sal from instructor where salary >30000;
+
+ TOTAL_SAL
+----------
+    611635
+5.List the student enrolled in each course.
+-->CREATE TABLE STUDENT (
+    student_id NUMBER(38) PRIMARY KEY,
+    name       VARCHAR2(50) NOT NULL,
+    tot_cred   NUMBER(3)
+);
+
+INSERT INTO STUDENT VALUES (101, 'Arjun', 20);
+INSERT INTO STUDENT VALUES (102, 'Meera', 22);
+INSERT INTO STUDENT VALUES (106, 'Rahul', 18);
+INSERT INTO STUDENT VALUES (107, 'Sneha', 19);
+INSERT INTO STUDENT VALUES (108, 'Kiran', 21);
+
+CREATE TABLE ENROLLMENT (
+    enrollment_id INT PRIMARY KEY,
+    student_id INT NOT NULL,
+    section_id INT NOT NULL,
+    enrollment_date DATE,
+    status VARCHAR(20) DEFAULT 'ENROLLED',
+    FOREIGN KEY (student_id) REFERENCES STUDENT(student_id),
+    FOREIGN KEY (section_id) REFERENCES SECTION(section_id)
+);
+
+INSERT INTO ENROLLMENT VALUES (1, 101, 1, DATE '2024-07-01', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (2, 102, 1, DATE '2024-07-01', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (3, 101, 2, DATE '2024-07-02', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (4, 102, 2, DATE '2024-07-02', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (5, 106, 3, DATE '2024-07-03', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (6, 107, 4, DATE '2024-07-03', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (7, 108, 5, DATE '2024-07-04', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (8, 101, 6, DATE '2024-07-04', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (9, 102, 7, DATE '2024-07-05', 'ENROLLED');
+INSERT INTO ENROLLMENT VALUES (10,106, 8, DATE '2024-07-05', 'ENROLLED');
+SQL> desc course;
+ Name                                                                                Null?    Type
+ ----------------------------------------------------------------------------------- -------- --------------------------------------------------------
+ COURSE_ID                                                                           NOT NULL VARCHAR2(8)
+ TITLE                                                                               NOT NULL VARCHAR2(100)
+ DEPT_ID                                                                                      NUMBER(38)
+ CREDITS                                                                                      NUMBER(38)
+
+SQL> desc section;
+ Name                                                                                Null?    Type
+ ----------------------------------------------------------------------------------- -------- --------------------------------------------------------
+ SECTION_ID                                                                          NOT NULL NUMBER(38)
+ COURSE_ID                                                                                    VARCHAR2(8)
+ SEC_ID                                                                                       NUMBER(38)
+ SEMESTER                                                                                     VARCHAR2(6)
+ YEAR                                                                                         NUMBER(38)
+ BUILDING                                                                                     VARCHAR2(50)
+ ROOM_NUMBER                                                                                  VARCHAR2(10)
+ TIME_SLOT_ID                                                                                 VARCHAR2(4)
+
+SQL> desc enrollment;
+ Name                                                                                Null?    Type
+ ----------------------------------------------------------------------------------- -------- --------------------------------------------------------
+ ENROLLMENT_ID                                                                       NOT NULL NUMBER(38)
+ STUDENT_ID                                                                          NOT NULL NUMBER(38)
+ SECTION_ID                                                                          NOT NULL NUMBER(38)
+ ENROLLMENT_DATE                                                                              DATE
+ STATUS                                                                                       VARCHAR2(20)
+
+SQL>  SELECT C.course_id,C.title, COUNT(E.student_id) AS enrolled_students FROM COURSE C LEFT JOIN SECTION S ON C.course_id = S.course_id LEFT JOIN ENROLLMENT E ON S.section_id= E.section_id GROUP BY C.course_id,C.title ORDER BY C.course_id;
+
+COURSE_I TITLE                                                                                                ENROLLED_STUDENTS
+-------- ---------------------------------------------------------------------------------------------------- -----------------
+BIO-101  Introduction to Biology                                                                                              1
+CS-001   Weekly Seminar                                                                                                       1
+CS-101   Introduction to Programming                                                                                          2
+CS-201   Data Structures                                                                                                      2
+MATH-101 Calculus I                                                                                                           1
+MATH-201 Linear Algebra                                                                                                       1
+PHY-101  Mechanics                                                                                                            1
+PHY-201  Quantum Physics                                                                                                      1
+
+8 rows selected.
+6. Find the name of departments whose names contain the string "sci" as a substring, regardless the case.
+SQL> select * from department where name ='Computer Science';
+
+   DEPT_ID NAME                           BUILDING                           BUDGET UNIVERSITY_ID
+---------- ------------------------------ ------------------------------ ---------- -------------
+         1 Computer Science               Taylor                             100000             1
+
+SQL> select * from department where lower(name) like 'computer science';
+
+   DEPT_ID NAME                           BUILDING                           BUDGET UNIVERSITY_ID
+---------- ------------------------------ ------------------------------ ---------- -------------
+         1 Computer Science               Taylor                             100000             1
+
+SQL> select * from department where lower(name) like '%science%';
+
+   DEPT_ID NAME                           BUILDING                           BUDGET UNIVERSITY_ID
+---------- ------------------------------ ------------------------------ ---------- -------------
+         1 Computer Science               Taylor                             100000             1
+
+SQL> select * from department where lower(name) like '%sci%';
+
+   DEPT_ID NAME                           BUILDING                           BUDGET UNIVERSITY_ID
+---------- ------------------------------ ------------------------------ ---------- -------------
+         1 Computer Science               Taylor                             100000             1
+7. Display the length of the name of all the students.
+SQL> select length(name) from student;
+
+LENGTH(NAME)
+------------
+          12
+           9
+           9
+          11
+          12
+          13
+          12
+           5
+           5
+           5
+           5
+
+LENGTH(NAME)
+------------
+           5
+
+12 rows selected.
